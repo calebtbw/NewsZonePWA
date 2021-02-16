@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ activeView == 'news' ? 'News' : 'Staff Members' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment [(ngModel)]="activeView">
+    <ion-segment-button value="news">
+      <ion-label>News</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="staff">
+      <ion-label>Staff Members</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="activeView == 'news'">
+    <ion-card *ngFor="let n of news | async" [href]="n.link" target="blank" [href]="n.link" target="blank">
+      <ion-card-header>
+        <ion-card-title>{{ n.title }}</ion-card-title>
+        <ion-card-subtitle>{{ n.created_at | date: 'short' }}</ion-card-subtitle>
+        <ion-card-content>
+          <!--- <p>{{ n.text | truncate:[200, '...'] }}</p> --->
+        </ion-card-content>
+      </ion-card-header>
+    </ion-card>
+  </div>
+
+  <ion-list *ngIf="activeView == 'staff'">
+    <ion-item *ngFor="let usr of users | async">
+      <ion-avatar slot="start">
+        <img [src]="usr.avatar" *ngIf="usr.avatar" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ usr.first_name }} {{ usr.last_name }}</h2>
+        <p>{{ usr.email }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
